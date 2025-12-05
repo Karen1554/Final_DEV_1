@@ -3,45 +3,6 @@ from typing import Optional, List
 from datetime import date
 from utils.states import States
 
-
-class Partido(SQLModel, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
-    fecha: date
-    lugar: str
-    equipo_local: str
-    equipo_visitante: str
-    estadistica: List["Estadistica"] = Relationship(back_populates="partido")
-
-
-class Estadistica(SQLModel, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
-    jugador_id: int = Field(foreign_key="jugador.id")
-    partido_id: int = Field(foreign_key="partido.id")
-    minutos_jugados: int
-    goles: int
-    tarjetas: int
-    jugador: "Jugador" = Relationship(back_populates="estadistica")
-    partido: "Partido" = Relationship(back_populates="estadistica")
-
-class Jugador(SQLModel, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
-    nombre: str
-    numero_unico: int = Field(ge=1, le=99, unique=True)
-    fecha_nacimiento: date
-    nacionalidad: str
-    altura: float
-    peso: float
-    pie_dominante: str
-    posicion: str
-    estado: States = Field(default=States.ACTIVO)
-    estadistica: List[Estadistica] = Relationship(back_populates="jugador")
-
-
-from sqlmodel import Field, SQLModel, Relationship
-from typing import Optional, List
-from datetime import date
-from utils.states import States
-
 class Partido(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     fecha: date
