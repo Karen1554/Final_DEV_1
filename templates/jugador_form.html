@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Crear/Editar Jugador{% endblock %}
+{% block content %}
+  <h1>{{ 'Crear' if action=='crear' else 'Editar' }} Jugador</h1>
+  {% if errors %}<div style="color:red">{{ errors }}</div>{% endif %}
+  <form method="post">
+    <label>Nombre <input name="nombre" value="{{ jugador.nombre if jugador else '' }}" required></label><br>
+    <label>Número único <input name="numero_unico" type="number" min="1" max="99" value="{{ jugador.numero_unico if jugador else '' }}" required></label><br>
+    <label>Fecha nacimiento <input name="fecha_nacimiento" type="date" value="{{ jugador.fecha_nacimiento if jugador else '' }}" required></label><br>
+    <label>Nacionalidad <input name="nacionalidad" value="{{ jugador.nacionalidad if jugador else '' }}" required></label><br>
+    <label>Altura(m) <input name="altura" type="number" step="0.01" value="{{ jugador.altura if jugador else '' }}" required></label><br>
+    <label>Peso(kg) <input name="peso" type="number" step="0.1" value="{{ jugador.peso if jugador else '' }}" required></label><br>
+    <label>Pie dominante <input name="pie_dominante" value="{{ jugador.pie_dominante if jugador else '' }}" required></label><br>
+    <label>Posición <select name="posicion">
+      <option value="PORTERO">Portero</option>
+      <option value="DEFENSOR">Defensor</option>
+      <option value="MEDIO">Medio</option>
+      <option value="DELANTERO">Delantero</option>
+    </select></label><br>
+    <label>Estado <select name="estado">
+      <option>ACTIVO</option><option>INACTIVO</option><option>LESIONADO</option><option>SUSPENDIDO</option>
+    </select></label><br>
+    <button type="submit">Guardar</button>
+  </form>
+{% endblock %}

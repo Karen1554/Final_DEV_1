@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Registrar desempeño{% endblock %}
+{% block content %}
+  <h1>Registrar desempeño (minutos, goles, tarjetas)</h1>
+  {% if errors %}<div style="color:red">{{ errors }}</div>{% endif %}
+  <form method="post">
+    <label>Jugador ID <input name="jugador_id" type="number" required></label><br>
+    <label>Partido ID <input name="partido_id" type="number" required></label><br>
+    <label>Minutos <input name="minutos_jugados" type="number" min="0" value="0"></label><br>
+    <label>Goles <input name="goles" type="number" min="0" value="0"></label><br>
+    <label>Tarjetas <input name="tarjetas" type="number" min="0" value="0"></label><br>
+    <button type="submit">Guardar</button>
+  </form>
+{% endblock %}

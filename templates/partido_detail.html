@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+
+    <h2 class="mb-4">Detalle del Partido</h2>
+
+    <ul class="list-group mb-3">
+        <li class="list-group-item"><strong>ID:</strong> {{ partido.id }}</li>
+        <li class="list-group-item"><strong>Equipo Local:</strong> {{ partido.equipo_local }}</li>
+        <li class="list-group-item"><strong>Equipo Visitante:</strong> {{ partido.equipo_visitante }}</li>
+        <li class="list-group-item"><strong>Tipo de Partido:</strong> {{ partido.tipo_partido }}</li>
+        <li class="list-group-item"><strong>Fecha:</strong> {{ partido.fecha }}</li>
+    </ul>
+
+    <a href="{% url 'partido_update' partido.id %}" class="btn btn-warning">Editar</a>
+    <a href="{% url 'partidos_list' %}" class="btn btn-secondary">Volver</a>
+
+</div>
+{% endblock %}

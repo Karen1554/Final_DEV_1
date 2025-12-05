@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Jugadores{% endblock %}
+{% block content %}
+  <h1>Jugadores</h1>
+  <a href="/jugadores/crear">Crear jugador</a>
+  <table border="1">
+    <tr><th>Nombre</th><th>Número</th><th>Posición</th><th>Estado</th><th></th></tr>
+    {% for j in jugadores %}
+    <tr>
+      <td>{{ j.nombre }}</td>
+      <td>{{ j.numero_unico }}</td>
+      <td>{{ j.posicion }}</td>
+      <td>{{ j.estado }}</td>
+      <td><a href="/jugadores/{{ j.id }}">Ver</a></td>
+    </tr>
+    {% endfor %}
+  </table>
+{% endblock %}

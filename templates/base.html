@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Panel Entrenador - {% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="/static/styles.css">
+  </head>
+  <body>
+    <nav>
+      <a href="/jugadores/">Jugadores</a> |
+      <a href="/partidos/">Partidos</a> |
+      <a href="/estadisticas/crear">Registrar desempeño</a>
+    </nav>
+    <hr/>
+    <section>
+      {% block content %}{% endblock %}
+    </section>
+  </body>
+</html>

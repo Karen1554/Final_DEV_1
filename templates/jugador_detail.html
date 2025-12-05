@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Detalle Jugador{% endblock %}
+{% block content %}
+  <h1>{{ jugador.nombre }} — #{{ jugador.numero_unico }}</h1>
+  <p>Posición: {{ jugador.posicion }} — Estado: {{ jugador.estado }}</p>
+  <p>Nacionalidad: {{ jugador.nacionalidad }} — Nac: {{ jugador.fecha_nacimiento }}</p>
+  <p>Altura: {{ jugador.altura }} m — Peso: {{ jugador.peso }} kg — Pie: {{ jugador.pie_dominante }}</p>
+
+  <h2>Estadísticas acumuladas</h2>
+  <p>Goles totales: {{ total_goles }}</p>
+  <p>Minutos totales: {{ total_minutos }}</p>
+  <p>Promedio minutos/partido: {{ promedio_minutos }}</p>
+
+  <h3>Historial de partidos</h3>
+  <table border="1">
+    <tr><th>Partido</th><th>Fecha</th><th>Minutos</th><th>Goles</th><th>Tarjetas</th></tr>
+    {% for e in estadisticas %}
+      <tr>
+        <td><a href="/partidos/{{ e.partido_id }}">Ver partido</a></td>
+        <td>{{ e.partido.fecha if e.partido else '—' }}</td>
+        <td>{{ e.minutos_jugados }}</td>
+        <td>{{ e.goles }}</td>
+        <td>{{ e.tarjetas }}</td>
+      </tr>
+    {% endfor %}
+  </table>
+{% endblock %}
