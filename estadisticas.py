@@ -1,32 +1,56 @@
-from sqlmodel import Session
-from models import Estadistica
+from fastapi import APIRouter, Depends, HTTPException
+from sqlmodel import Session, select
+from db import get_session
+from models import Estadistica, Jugador, Partido
 
-def crear_estadistica(session: Session, jugador_id: int, partido_id: int, minutos_jugados: int, goles: int, tarjetas: int):
-    estadistica = Estadistica(jugador_id=jugador_id, partido_id=partido_id, minutos_jugados=minutos_jugados, goles=goles, tarjetas=tarjetas)
-    session.add(estadistica)
+router = APIRouter()
+
+@router.post("/", response_model=Estadistica)
+def crear_estadistica(est: Estadistica, session: Session = Depends(get_session)):
+
+    jugador = session.get(Jugador, est.jugador_id)
+    if not jugador:
+        raise HTTPException(404, "Jugador no existe")
+    partido = session.get(Partido, est.partido_id)
+    if not partido:
+        raise HTTPException(404, "Partido no existe")
+
+    session.add(est)
     session.commit()
-    session.refresh(estadistica)
-    return estadistica
+    session.refresh(est)
+    return est
 
+@router.get("/", response_model=list[Estadistica])
+def listar_estadisticas(session: Session = Depends(get_session)):
+    return session.exec(select(Estadistica)).all()
 
-def leer_estadistica(session: Session, estadistica_id: int):
-    estadistica = session.query(Estadistica).filter(Estadistica.id == estadistica_id).first()
-    return estadistica
+# Obtener
+@router.get("/{estadistica_id}", response_model=Estadistica)
+def obtener_estadistica(estadistica_id: int, session: Session = Depends(get_session)):
+    est = session.get(Estadistica, estadistica_id)
+    if not est:
+        raise HTTPException(404, "Estadística no encontrada")
+    return est
 
+@router.put("/{estadistica_id}", response_model=Estadistica)
+def actualizar_estadistica(estadistica_id: int, data: Estadistica, session: Session = Depends(get_session)):
+    est = session.get(Estadistica, estadistica_id)
+    if not est:
+        raise HTTPException(404, "Estadística no encontrada")
 
-def actualizar_estadistica(session: Session, estadistica_id: int, goles: int, tarjetas: int):
-    estadistica = session.query(Estadistica).filter(Estadistica.id == estadistica_id).first()
-    if estadistica:
-        estadistica.goles = goles
-        estadistica.tarjetas = tarjetas
-        session.commit()
-        session.refresh(estadistica)
-    return estadistica
+    for key, value in data.dict(exclude_unset=True).items():
+        setattr(est, key, value)
 
+    session.commit()
+    session.refresh(est)
+    return est
 
-def eliminar_estadistica(session: Session, estadistica_id: int):
-    estadistica = session.query(Estadistica).filter(Estadistica.id == estadistica_id).first()
-    if estadistica:
-        session.delete(estadistica)
-        session.commit()
-    return estadistica
+@router.delete("/{estadistica_id}")
+def eliminar_estadistica(estadistica_id: int, session: Session = Depends(get_session)):
+    est = session.get(Estadistica, estadistica_id)
+    if not est:
+        raise HTTPException(404, "Estadística no encontrada")
+
+    session.delete(est)
+    session.commit()
+    return {"message": "Estadística eliminada"}
