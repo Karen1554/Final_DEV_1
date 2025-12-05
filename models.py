@@ -1,7 +1,11 @@
 from sqlmodel import Field, SQLModel, Relationship
 from typing import Optional, List
 from datetime import date
+
 from utils.states import States
+from utils.positions import Position
+from db import engine
+
 
 class Partido(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
@@ -11,6 +15,7 @@ class Partido(SQLModel, table=True):
     goles_rival: int
     tipo_partido: str
     resultado: str = Field(default="Pendiente")
+
     estadisticas: List["Estadistica"] = Relationship(back_populates="partido")
 
     def determinar_resultado(self):
@@ -29,6 +34,7 @@ class Estadistica(SQLModel, table=True):
     minutos_jugados: int
     goles: int
     tarjetas: int
+
     jugador: "Jugador" = Relationship(back_populates="estadisticas")
     partido: "Partido" = Relationship(back_populates="estadisticas")
 
@@ -42,6 +48,7 @@ class Jugador(SQLModel, table=True):
     altura: float
     peso: float
     pie_dominante: str
-    posicion: str
+    posicion: Position
     estado: States = Field(default=States.ACTIVO)
+
     estadisticas: List[Estadistica] = Relationship(back_populates="jugador")
